@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chris FX World - Premium Trading Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ========= Enhanced Dark theme - Neon trading style ========= */
+        :root {
+            --bg: #05070a;
+            --panel: #07101a;
+            --card: #0a1622;
+            --muted: rgba(255,255,255,0.08);
+            --text: #e6f7ff;
+            --accent1: #00ffd5;
+            --accent2: #00c28a;
+            --hot: #ff6b6b;
+            --gold: #ffcc00;
+            --purple: #a892fe;
+            --glass: rgba(255,255,255,0.02);
+            --glow: 0 8px 30px rgba(0,255,213,0.08);
+            --shadow: 0 12px 40px rgba(0,0,0,0.6);
+            --radius: 14px;
+            --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            height: 100%;
+            font-family: var(--font-sans);
+            background: linear-gradient(135deg, #02040a, #071427);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        
+        .app {
+            min-height: 100vh;
+            padding: 28px 18px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        /* Enhanced Brand Styling */
+        .brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: .6px;
+            background: linear-gradient(90deg, var(--gold), var(--accent1), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s ease-in-out infinite alternate;
+            text-align: center;
+        }
+        
+        @keyframes shimmer {
+            from { text-shadow: 0 0 10px rgba(0,255,213,0.08); }
+            to { text-shadow: 0 0 28px rgba(255,204,0,0.12), 0 0 15px rgba(168, 146, 254, 0.3); }
+        }
+        
+        .subtitle {
+            opacity: .85;
+            font-weight: 600;
+            color: rgba(230,247,255,0.85);
+            text-align: center;
+        }
+        
+        /* Enhanced Card Design */
+        .card {
+            width: 100%;
+            max-width: 1100px;
+            background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.01));
+            border-radius: var(--radius);
+            padding: 22px;
+            border: 1px solid var(--muted);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.7);
+        }
+        
+        .center { display: flex; align-items: center; justify-content: center; }
+        .row { display: flex; gap: 12px; align-items: center; }
+        .col { display: flex; flex-direction: column; gap: 8px; }
+        
+        /* Enhanced Buttons */
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-weight: 800;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn {
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            color: #001;
+            box-shadow: var(--glow);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(0,255,213,0.15);
+        }
+        
+        .btn.ghost {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--muted);
+        }
+        
+        .btn.ghost:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .btn.warn {
+            background: linear-gradient(90deg, var(--gold), #ff8a00);
+            color: #071227;
+        }
+        
+        .btn.purple {
+            background: linear-gradient(90deg, var(--purple), #7a5afc);
+            color: white;
+        }
+        
+        .muted { color: rgba(230,247,255,0.8); }
+        .small { font-size: 0.92rem; }
+        
+        /* Enhanced Inputs */
+        input, select, textarea {
+            background: transparent;
+            border: 1px solid var(--muted);
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent1);
+        }
+        
+        .hidden { display: none !important; }
+        
+        /* Enhanced Navigation */
+        nav.steps {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .step {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.02);
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active {
+            background: rgba(0,255,213,0.1);
+            border-color: var(--accent1);
+            color: var(--accent1);
+        }
+        
+        /* Page transitions */
+        .page {
+            width: 100%;
+            max-width: 1100px;
+            transition: opacity .35s ease, transform .35s ease;
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+        }
+        
+        .page.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        /* Welcome */
+        .btc {
+            width: 120px;
+            height: 120px;
+            animation: btcPulse 2.4s infinite;
+        }
+        
+        @keyframes btcPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Enhanced Ticker */
+        .ticker {
+            background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Dashboard layout */
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .kpi {
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.02);
+            transition: transform 0.3s ease;
+        }
+        
+        .kpi:hover {
+            transform: translateY(-3px);
+        }
+        
+        .kpi .num {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 8px 0;
+            background: linear-gradient(90deg, var(--accent1), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .ref-box {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+        }
+        
+        .copy {
+            background: transparent;
+            border: 1px dashed rgba(255,255,255,0.06);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--accent1);
+        }
+        
+        .chart-area {
+            background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.02);
+            margin: 20px 0;
+        }
+        
+        .candles {
+            height: 260px;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            padding: 8px;
+            overflow: hidden;
+        }
+        
+        .candle {
+            width: 10px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        
+        .wick {
+            width: 2px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #999;
+        }
+        
+        .body {
+            width: 10px;
+            border-radius: 2px;
+            position: absolute;
+            bottom: 0;
+        }
+        
+        /* Enhanced news ticker */
+        .news-ticker {
+            background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+            padding: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        
+        .ticker-scroll {
+            display: inline-block;
+            padding-left: 100%;
+            animation: ticker 16s linear infinite;
+        }
+        
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Enhanced Chat page */
+        .chat-window {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 60vh;
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: var(--radius);
+            padding: 16px;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .messages {
+            flex: 1;
+            overflow: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 50vh;
+        }
+        
+        .bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.5;
+        }
+        
+        .bubble.bot {
+            background: rgba(0,255,213,0.06);
+            color: var(--accent1);
+            align-self: flex-start;
+            border: 1px solid rgba(0,255,213,0.06);
+        }
+        
+        .bubble.user {
+            background: rgba(255,255,255,0.03);
+            color: var(--text);
+            align-self: flex-end;
+        }
+        
+        .typing {
+            font-style: italic;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .footer {
+            opacity: 0.8;
+            font-size: .95rem;
+            margin-top: 16px;
+            text-align: center;
+        }
+        
+        /* Enhanced Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            background: var(--panel);
+            border-radius: var(--radius);
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--muted);
+            box-shadow: var(--shadow);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        /* Enhanced Responsive Design */
+        @media (max-width: 880px) {
+            .candles { height: 180px; }
+            .title { font-size: 28px; }
+            .btc { width: 88px; height: 88px; }
+            .kpis { grid-template-columns: 1fr; }
+            .ref-box { flex-direction: column; align-items: stretch; }
+        }
+        
+        /* New Elements */
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            background: var(--card);
+            border: 1px solid var(--muted);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .notification.success {
+            border-left: 4px solid var(--accent1);
+        }
+        
+        .notification.error {
+            border-left: 4px solid var(--hot);
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--panel);
+            color: var(--text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            border: 1px solid var(--muted);
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        
+        /* New Styles for Upgrades */
+        .floating-chat-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent1), var(--purple));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,255,213,0.3);
+            cursor: pointer;
+            z-index: 999;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .crypto-item {
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        
+        .crypto-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .social-share {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .social-btn {
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .whatsapp { background: #25D366; color: white; }
+        .facebook { background: #3b5998; color: white; }
+        .telegram { background: #0088cc; color: white; }
+        
+        .signal-highlight {
+            background: linear-gradient(135deg, rgba(255,204,0,0.15), rgba(0,255,213,0.15));
+            border-radius: 10px;
+            padding: 16px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,204,0,0.2);
+            text-align: center;
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, rgba(0,255,213,0.1), rgba(168,146,254,0.1));
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(0,255,213,0.1);
+            text-align: center;
+        }
+        
+        .nav-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--panel);
+            border-top: 1px solid var(--muted);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            z-index: 998;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-item.active {
+            opacity: 1;
+            color: var(--accent1);
+        }
+        
+        .nav-item i {
+            font-size: 20px;
+        }
+        
+        .nav-label {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Notification System -->
+        <div id="notification" class="notification hidden">
+            <i class="fas fa-check-circle"></i>
+            <span id="notification-text"></span>
+        </div>
+        
+        <!-- Floating Chat Button -->
+        <div class="floating-chat-btn" onclick="toPage('chat')">
+            <i class="fas fa-robot"></i>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="nav-bottom">
+            <div class="nav-item active" onclick="toPage('dashboard')">
+                <i class="fas fa-home"></i>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item" onclick="toPage('withdraw')">
+                <i class="fas fa-wallet"></i>
+                <span class="nav-label">Withdraw</span>
+            </div>
+            <div class="nav-item" onclick="toPage('signals')">
+                <i class="fas fa-chart-line"></i>
+                <span class="nav-label">Signals</span>
+            </div>
+            <div class="nav-item" onclick="toPage('settings')">
+                <i class="fas fa-cog"></i>
+                <span class="nav-label">Settings</span>
+            </div>
+        </div>
+        
+        <!-- Brand Header -->
+        <div class="brand">
+            <h1 class="title">Chris FX World</h1>
+            <p class="subtitle">Signals • Referral • Learning — Follow the Boss</p>
+        </div>
+        
+        <!-- Navigation Steps -->
+        <nav class="steps">
+            <div class="step active" id="step-welcome">Welcome</div>
+            <div class="step" id="step-referral">Referral</div>
+            <div class="step" id="step-auth">Auth</div>
+            <div class="step" id="step-profile">Profile</div>
+            <div class="step" id="step-dashboard">Dashboard</div>
+        </nav>
+        
+        <!-- Welcome Page -->
+        <div id="page-welcome" class="page visible">
+            <div class="card center">
+                <div class="col" style="align-items: center; text-align: center;">
+                    <svg class="btc" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="#F7931A"/>
+                        <path d="M63.31 43.08c1.38-5.53-3.38-8.5-9.13-10.48l1.87-7.5-4.57-1.14-1.82 7.3c-1.2-.3-2.43-.58-3.65-.86l1.83-7.35-4.57-1.14-1.87 7.5c-1-.24-1.98-.46-2.93-.7l.01-.08-6.3-1.57-1.21 4.87s3.38.78 3.31.82c1.85.46 2.18 1.68 2.13 2.65l-2.13 8.55c.13.03.29.08.47.15l-.48-.12-3 12.02c-.23.57-.81 1.43-2.12 1.1.05.07-3.32-.83-3.32-.83l-2.27 5.22 5.95 1.48c1.11.28 2.19.57 3.26.83l-1.9 7.62 4.56 1.14 1.87-7.5c1.25.34 2.46.65 3.64.95l-1.86 7.45 4.57 1.14 1.9-7.62c7.8 1.48 13.67.88 16.14-6.2 1.97-5.66.98-8.93-2.07-11.06 4.67-1.08 8.19-4.16 9.13-10.53zm-9.93 13.9c-1.4 5.62-10.87 2.58-13.94 1.82l2.49-9.98c3.07.77 12.9 2.29 11.45 8.16zm1.4-13.96c-1.27 5.1-9.13 2.51-11.68 1.95l2.26-9.06c2.55.56 10.74 1.55 9.42 7.11z" fill="white"/>
+                    </svg>
+                    <h2 style="margin: 16px 0 8px;">Welcome to Chris FX World</h2>
+                    <p class="muted" style="margin-bottom: 20px;">Premium trading signals, risk guidance and broker help. Invite friends to earn.</p>
+                    
+                    <!-- Crypto Grid -->
+                    <div class="crypto-grid">
+                        <div class="crypto-item">
+                            <div class="crypto-icon"><i class="fab fa-bitcoin"></i></div>
+                            <div>BTC</div>
+                            <div class="small" style="color: var(--accent1);">$42,150</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-icon"><i class="fab fa-ethereum"></i></div>
+                            <div>ETH</div>
+                            <div class="small" style="color: var(--accent1);">$2,250</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-icon"><i class="fas fa-coins"></i></div>
+                            <div>BNB</div>
+                            <div class="small" style="color: var(--accent1);">$305</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-icon"><i class="fas fa-dollar-sign"></i></div>
+                            <div>XRP</div>
+                            <div class="small" style="color: var(--accent1);">$0.58</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Signal Highlight -->
+                    <div class="signal-highlight">
+                        <h3 style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-bullhorn"></i> FREE SIGNALS & TRADING ADVICE</h3>
+                        <p style="margin-bottom: 12px;">Get daily profitable signals and expert trading guidance directly from Chris the Boss!</p>
+                        <p style="font-weight: bold; color: var(--accent1);">WhatsApp: +2348115975301</p>
+                        <p class="small muted">90% success rate claimed • Risk management guidance • Broker assistance</p>
+                    </div>
+                    
+                    <button class="btn" onclick="toPage('referral')">
+                        <i class="fas fa-arrow-right"></i> Next — Referral Program
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Referral Page -->
+        <div id="page-referral" class="page">
+            <div class="card">
+                <h2 style="margin-bottom: 16px;">Referral Program — Earn $0.02 per friend</h2>
+                <p class="muted" style="margin-bottom: 16px;">Each successful referral (sign up with your link) gives you $0.02. New users start with $0.001.</p>
+                
+                <h3 style="margin: 20px 0 12px; color: var(--accent1);">Rules & Regulations</h3>
+                <ul style="padding-left: 20px; margin-bottom: 20px;">
+                    <li class="muted" style="margin-bottom: 8px;">No more than 2 accounts per IP address (client-side simulated).</li>
+                    <li class="muted" style="margin-bottom: 8px;">Referral credits happen when a new user registers via your referral link.</li>
+                    <li class="muted" style="margin-bottom: 8px;">Abuse may result in account restrictions.</li>
+                </ul>
+                
+                <div class="row" style="justify-content: center; margin-top: 20px;">
+                    <button class="btn" onclick="toPage('auth')">
+                        <i class="fas fa-arrow-right"></i> Next — Create Account / Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Auth Page -->
+        <div id="page-auth" class="page">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; text-align: center;">Create Account or Sign In</h2>
+                
+                <div class="col">
+                    <label for="auth-username">Username</label>
+                    <input id="auth-username" type="text" placeholder="Enter your username">
+                    
+                    <label for="auth-password" style="margin-top: 16px;">Password</label>
+                    <input id="auth-password" type="password" placeholder="Enter your password">
+                </div>
+                
+                <div style="margin-top: 16px;" class="muted">
+                    Live ticker: <span id="auth-ticker" class="ticker"><i class="fas fa-chart-line"></i> USD/JPY 150.00</span>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+                    <button class="btn" onclick="handleSignup()">
+                        <i class="fas fa-user-plus"></i> Register
+                    </button>
+                    <button class="btn ghost" onclick="handleLogin()">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </div>
+                
+                <div id="auth-msg" class="muted small" style="margin-top: 16px; text-align: center;"></div>
+            </div>
+        </div>
+        
+        <!-- Profile Page -->
+        <div id="page-profile" class="page">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; text-align: center;">Edit Profile (optional)</h2>
+                
+                <div class="col">
+                    <label for="profile-name">Display name</label>
+                    <input id="profile-name" type="text" placeholder="Your display name">
+                    
+                    <label for="profile-phone" style="margin-top: 16px;">Phone</label>
+                    <input id="profile-phone" type="text" placeholder="Your phone number">
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+                    <button class="btn" onclick="saveProfile()">
+                        <i class="fas fa-save"></i> Save & Continue
+                    </button>
+                    <button class="btn ghost" onclick="skipProfile()">
+                        <i class="fas fa-forward"></i> Skip
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Page -->
+        <div id="page-dashboard" class="page">
+            <div class="card">
+                <h2 id="dash-welcome" style="margin-bottom: 8px;">Welcome, Trader</h2>
+                <p class="muted" style="margin-bottom: 20px;">
+                    Chris the Boss — signals with 90% profit / 10% loss (claimed)
+                </p>
+                
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <div class="small muted"><i class="fas fa-wallet"></i> Wallet balance</div>
+                    <div class="num" id="user-balance">$0.001</div>
+                    <div class="level-badge" id="user-level">
+                        <i class="fas fa-medal"></i> Level: Beginner Trader
+                    </div>
+                    <button class="btn" style="margin-top: 15px;" onclick="toPage('withdraw')">
+                        <i class="fas fa-money-bill-wave"></i> Withdraw Funds
+                    </button>
+                </div>
+                
+                <div class="kpis">
+                    <div class="kpi">
+                        <div class="small muted"><i class="fas fa-link"></i> Referral Program</div>
+                        <p class="muted small" style="margin: 12px 0;">Earn $0.02 for every friend who signs up with your link</p>
+                        <button class="btn ghost" onclick="toPage('referral')" style="width: 100%;">
+                            <i class="fas fa-users"></i> Invite Friends
+                        </button>
+                    </div>
+                    
+                    <div class="kpi">
+                        <div class="small muted"><i class="fas fa-chart-line"></i> Trading Signals</div>
+                        <p class="muted small" style="margin: 12px 0;">Get expert trading signals from Chris</p>
+                        <button class="btn" onclick="toPage('signals')" style="width: 100%;">
+                            <i class="fas fa-bolt"></i> Generate Signal
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Referral Section -->
+                <div class="kpi" style="margin: 20px 0;">
+                    <div class="small muted"><i class="fas fa-link"></i> Your Referral link</div>
+                    <div class="ref-box">
+                        <input id="referral-link" readonly style="background:transparent;border:none;color:var(--text); font-weight:800"/>
+                        <button class="copy" onclick="copyReferral()">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    
+                    <div class="social-share">
+                        <div class="social-btn whatsapp" onclick="shareOnWhatsApp()">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </div>
+                        <div class="social-btn facebook" onclick="shareOnFacebook()">
+                            <i class="fab fa-facebook"></i> Facebook
+                        </div>
+                        <div class="social-btn telegram" onclick="shareOnTelegram()">
+                            <i class="fab fa-telegram"></i> Telegram
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 12px;" class="muted small">
+                        Invited: <strong id="ref-count">0</strong> people — Earned: $<span id="ref-earned">0.00</span>
+                    </div>
+                </div>
+                
+                <!-- News Ticker -->
+                <div style="margin-top: 20px;" class="news-ticker">
+                    <div class="ticker-scroll" id="news-scroll">
+                        <i class="fas fa-newspaper"></i> EUR/USD bullish 📈 • BTC consolidating near 45k 💹 • Gold higher • FED commentary incoming • USD/JPY volatile
+                    </div>
+                </div>
+                
+                <!-- Chart + Signals Panel -->
+                <div style="display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 320px;" class="chart-area">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="muted small"><i class="fas fa-chart-candlestick"></i> Animated candlestick chart (simulated)</div>
+                            <div class="muted small">Pair: BTC/USDT</div>
+                        </div>
+                        <div class="candles" id="candles"></div>
+                    </div>
+                    
+                    <div style="width: 340px; min-width: 260px;" class="chart-area">
+                        <h4 style="margin: 6px 0; color: var(--accent1);">
+                            <i class="fas fa-info-circle"></i> Trading Signals & Info
+                        </h4>
+                        <div class="muted small" style="text-align: left; line-height: 1.5;">
+                            <p style="margin-bottom: 12px;">
+                                <strong>Performance claim:</strong> 90% profit / 10% loss
+                            </p>
+                            <p style="margin-bottom: 12px;">
+                                <strong>Free signals WhatsApp:</strong> 
+                                <a href="https://wa.me/2348115975301" target="_blank" style="color: var(--accent1);">+2348115975301</a>
+                            </p>
+                            <p style="margin-bottom: 12px;">
+                                <strong>Withdraws:</strong> Minimum $2. For payments contact the WhatsApp above when a withdrawal is approved.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Withdraw Page -->
+        <div id="page-withdraw" class="page">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2><i class="fas fa-wallet"></i> Withdraw Funds</h2>
+                    <button class="btn ghost" onclick="toPage('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+                
+                <div class="balance-card">
+                    <div class="small muted">Available Balance</div>
+                    <div class="num" id="withdraw-balance">$0.001</div>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <label for="withdraw-amount">Withdrawal Amount ($)</label>
+                    <input id="withdraw-amount-page" type="number" placeholder="Enter amount" min="2" step="0.01"/>
+                    
+                    <div class="muted small" style="margin-top: 8px;">
+                        Minimum: $2 — Maximum per withdrawal: $10
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="btn" onclick="requestWithdraw()" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Request Withdrawal
+                        </button>
+                    </div>
+                    
+                    <div id="withdraw-help" class="muted small" style="margin-top: 12px; text-align: center;"></div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 15px; color: var(--accent1);"><i class="fas fa-history"></i> Withdrawal History</h3>
+                    <div id="withdraw-list"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Signals Page -->
+        <div id="page-signals" class="page">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2><i class="fas fa-bolt"></i> Trading Signals</h2>
+                    <button class="btn ghost" onclick="toPage('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+                
+                <div class="signal-highlight">
+                    <h3 style="color: var(--gold); margin-bottom: 10px;"><i class="fas fa-bullhorn"></i> GET PROFITABLE SIGNALS DIRECTLY</h3>
+                    <p style="margin-bottom: 12px;">Contact Chris on WhatsApp for daily signals and expert trading guidance!</p>
+                    <p style="font-weight: bold; color: var(--accent1); font-size: 1.2rem;">WhatsApp: +2348115975301</p>
+                    <p class="small muted">90% success rate claimed • Risk management guidance • Broker assistance</p>
+                    
+                    <a href="https://wa.me/2348115975301" target="_blank" class="btn" style="margin-top: 15px;">
+                        <i class="fab fa-whatsapp"></i> Message on WhatsApp
+                    </a>
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 15px; color: var(--accent1);">Generate Sample Signal</h3>
+                    <button class="btn" onclick="generateSignal()" style="width: 100%;">
+                        <i class="fas fa-magic"></i> Generate Signal
+                    </button>
+                    
+                    <div id="signal-output" style="margin-top: 20px; padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;" class="muted">
+                        No signal yet. Click the button to generate a trading signal.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Page -->
+        <div id="page-settings" class="page">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                    <button class="btn ghost" onclick="toPage('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h3 style="margin-bottom: 15px; color: var(--accent1);">Account Settings</h3>
+                    
+                    <div class="col">
+                        <label for="settings-username">Username</label>
+                        <input id="settings-username" type="text" placeholder="Your username" disabled>
+                        
+                        <label for="settings-password" style="margin-top: 16px;">New Password</label>
+                        <input id="settings-password" type="password" placeholder="Enter new password">
+                        
+                        <label for="settings-name" style="margin-top: 16px;">Display Name</label>
+                        <input id="settings-name" type="text" placeholder="Your display name">
+                    </div>
+                    
+                    <button class="btn" onclick="updateSettings()" style="margin-top: 20px; width: 100%;">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 15px; color: var(--accent1);">Account Actions</h3>
+                    
+                    <button class="btn ghost" onclick="logout()" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    
+                    <button class="btn warn" onclick="clearData()" style="width: 100%;">
+                        <i class="fas fa-trash"></i> Clear All Data
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Page -->
+        <div id="page-chat" class="page">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2><i class="fas fa-robot"></i> AI Assistant — Chris the Boss</h2>
+                    <button class="btn ghost" onclick="toPage('dashboard')">
+                        <i class="fas fa-times"></i> Exit
+                    </button>
+                </div>
+                
+                <div class="chat-window">
+                    <div class="messages" id="chat-messages"></div>
+                    <div class="controls">
+                        <input id="chat-input" type="text" placeholder="Ask about trading, brokers, MT4/MT5, TP/SL, indicators..." />
+                        <button class="btn" onclick="sendChat()">
+                            <i class="fas fa-paper-plane"></i> Send
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="footer muted">
+                    <i class="fas fa-info-circle"></i> AI replies are offline keyword-based to focus on trading topics only.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        /* ========================= Storage & Initialization ========================= */
+        const KEY_USERS = 'cfw_users';
+        const KEY_USERIPS = 'cfw_userips';
+        const KEY_USERDATA = 'cfw_userdata';
+        const KEY_SESSION = 'cfw_session';
+        const KEY_MYIP = 'cfw_myip';
+        
+        let users = JSON.parse(localStorage.getItem(KEY_USERS) || '{}');
+        let userIPs = JSON.parse(localStorage.getItem(KEY_USERIPS) || '{}');
+        let userData = JSON.parse(localStorage.getItem(KEY_USERDATA) || '{}');
+        let currentUser = localStorage.getItem(KEY_SESSION) || null;
+        let myIP = localStorage.getItem(KEY_MYIP);
+        
+        if (!myIP) {
+            myIP = 'IP-' + Math.floor(Math.random() * 900000 + 10000);
+            localStorage.setItem(KEY_MYIP, myIP);
+        }
+        
+        // Parse ?ref param
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlRef = urlParams.get('ref') ? String(urlParams.get('ref')).trim() : null;
+        
+        function saveAll() {
+            localStorage.setItem(KEY_USERS, JSON.stringify(users));
+            localStorage.setItem(KEY_USERIPS, JSON.stringify(userIPs));
+            localStorage.setItem(KEY_USERDATA, JSON.stringify(userData));
+        }
+        
+        function ensureUser(u) {
+            if (!userData[u]) {
+                userData[u] = {
+                    balance: 0.001,
+                    referrals: 0,
+                    referredBy: null,
+                    withdraws: [],
+                    profile: { name: '', phone: '' }
+                };
+                saveAll();
+            }
+            return userData[u];
+        }
+        
+        function fmt(n) {
+            return Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 8 });
+        }
+        
+        /* ========================= Notification System ========================= */
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        /* ========================= Page navigation helpers ========================= */
+        function hideAllPages() {
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('visible');
+            });
+        }
+        
+        function updateStepIndicator(key) {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            const stepMap = {
+                'welcome': 'step-welcome',
+                'referral': 'step-referral',
+                'auth': 'step-auth',
+                'profile': 'step-profile',
+                'dashboard': 'step-dashboard'
+            };
+            
+            if (stepMap[key]) {
+                document.getElementById(stepMap[key]).classList.add('active');
+            }
+        }
+        
+        function updateNavIndicator(key) {
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+            
+            const navMap = {
+                'dashboard': 0,
+                'withdraw': 1,
+                'signals': 2,
+                'settings': 3
+            };
+            
+            if (navMap[key] !== undefined) {
+                document.querySelectorAll('.nav-item')[navMap[key]].classList.add('active');
+            }
+        }
+        
+        function showPageKey(key) {
+            const map = {
+                'welcome': 'page-welcome',
+                'referral': 'page-referral',
+                'auth': 'page-auth',
+                'profile': 'page-profile',
+                'dashboard': 'page-dashboard',
+                'withdraw': 'page-withdraw',
+                'signals': 'page-signals',
+                'settings': 'page-settings',
+                'chat': 'page-chat'
+            };
+            
+            hideAllPages();
+            
+            const id = map[key];
+            if (id) {
+                const el = document.getElementById(id);
+                el.classList.add('visible');
+                updateStepIndicator(key);
+                updateNavIndicator(key);
+            }
+        }
+        
+        function toPage(name) {
+            showPageKey(name);
+            if (name === 'dashboard') refreshDashboard();
+            if (name === 'withdraw') refreshWithdrawPage();
+            if (name === 'settings') refreshSettingsPage();
+            if (name === 'chat') ensureChatIntro();
+        }
+        
+        /* Initialize correct entry page depending on session */
+        window.addEventListener('load', () => {
+            // Start ticker and candles
+            startTicker();
+            initCandles();
+            startNewsTicker();
+            
+            // Restore session
+            if (currentUser && users[currentUser]) {
+                ensureUser(currentUser);
+                prepareReferralLink();
+                toPage('dashboard');
+                refreshDashboard();
+            } else {
+                // Show welcome
+                showPageKey('welcome');
+                if (urlRef) {
+                    document.getElementById('auth-msg').textContent = `You arrived via referral: ${urlRef}. If you sign up, ${urlRef} will earn $0.02.`;
+                    document.getElementById('auth-msg').style.color = 'var(--accent1)';
+                }
+            }
+        });
+        
+        /* ========================= Auth: signup / login ========================= */
+        function handleSignup() {
+            const u = document.getElementById('auth-username').value.trim();
+            const p = document.getElementById('auth-password').value;
+            const msgEl = document.getElementById('auth-msg');
+            msgEl.style.color = 'var(--hot)';
+            
+            if (!u || !p) {
+                msgEl.textContent = 'Enter username & password';
+                return;
+            }
+            
+            if (users[u]) {
+                msgEl.textContent = 'User exists — please sign in or pick another username';
+                return;
+            }
+            
+            // Check simulated IP limit
+            const ipCount = Object.values(userIPs || {}).filter(ip => ip === myIP).length;
+            if (ipCount >= 2) {
+                msgEl.textContent = 'Signup blocked: maximum accounts for this IP reached (2)';
+                return;
+            }
+            
+            // Register user
+            users[u] = p;
+            saveAll();
+            
+            // Create user data
+            ensureUser(u);
+            
+            // If this page was visited with ?ref=someone, credit the referrer
+            if (urlRef && urlRef !== u && users[urlRef]) {
+                if (!userData[u].referredBy) {
+                    userData[urlRef] = userData[urlRef] || {
+                        balance: 0.001,
+                        referrals: 0,
+                        referredBy: null,
+                        withdraws: [],
+                        profile: { name: '', phone: '' }
+                    };
+                    userData[urlRef].referrals = (userData[urlRef].referrals || 0) + 1;
+                    userData[urlRef].balance = Number((Number(userData[urlRef].balance || 0) + 0.02).toFixed(8));
+                    userData[u].referredBy = urlRef;
+                    saveAll();
+                }
+            }
+            
+            msgEl.style.color = 'var(--accent1)';
+            msgEl.textContent = 'Signup saved — please sign in now';
+            showNotification('Account created successfully! Please sign in.', 'success');
+        }
+        
+        function handleLogin() {
+            const u = document.getElementById('auth-username').value.trim();
+            const p = document.getElementById('auth-password').value;
+            const msgEl = document.getElementById('auth-msg');
+            msgEl.style.color = 'var(--hot)';
+            
+            if (!u || !p) {
+                msgEl.textContent = 'Enter username & password';
+                return;
+            }
+            
+            if (!users[u]) {
+                msgEl.textContent = 'No such account — please register';
+                return;
+            }
+            
+            if (users[u] !== p) {
+                msgEl.textContent = 'Incorrect password';
+                return;
+            }
+            
+            // Check IP lock
+            if (userIPs[u] && userIPs[u] !== myIP) {
+                msgEl.textContent = 'This account is locked to another IP';
+                return;
+            }
+            
+            // Lock to this IP now
+            userIPs[u] = myIP;
+            saveAll();
+            
+            // Set session
+            currentUser = u;
+            localStorage.setItem(KEY_SESSION, currentUser);
+            ensureUser(currentUser);
+            prepareReferralLink();
+            msgEl.textContent = '';
+            
+            // Prefill profile
+            document.getElementById('profile-name').value = userData[currentUser].profile.name || '';
+            document.getElementById('profile-phone').value = userData[currentUser].profile.phone || '';
+            
+            toPage('profile');
+            refreshDashboard();
+            showNotification('Login successful! Welcome back.', 'success');
+        }
+        
+        /* ========================= Profile ========================= */
+        function saveProfile() {
+            if (!currentUser) {
+                alert('Login first');
+                toPage('auth');
+                return;
+            }
+            
+            const name = document.getElementById('profile-name').value.trim();
+            const phone = document.getElementById('profile-phone').value.trim();
+            
+            userData[currentUser].profile = { name, phone };
+            saveAll();
+            
+            toPage('dashboard');
+            showNotification('Profile updated successfully!', 'success');
+        }
+        
+        function skipProfile() {
+            toPage('dashboard');
+        }
+        
+        /* ========================= Referral link & copy ========================= */
+        function prepareReferralLink() {
+            if (!currentUser) return;
+            
+            const base = window.location.href.split('?')[0];
+            const link = base + '?ref=' + encodeURIComponent(currentUser);
+            const el = document.getElementById('referral-link');
+            el.value = link;
+            el.setAttribute('data-link', link);
+            
+            // Update counts
+            document.getElementById('ref-count').innerText = userData[currentUser].referrals || 0;
+            const earned = ((userData[currentUser].referrals || 0) * 0.02).toFixed(2);
+            document.getElementById('ref-earned').innerText = earned;
+        }
+        
+        function copyReferral() {
+            if (!currentUser) {
+                alert('Login first');
+                toPage('auth');
+                return;
+            }
+            
+            const link = document.getElementById('referral-link').getAttribute('data-link');
+            navigator.clipboard.writeText(link).then(() => {
+                showNotification('Referral link copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('Failed to copy link', 'error');
+            });
+        }
+        
+        function shareOnWhatsApp() {
+            if (!currentUser) {
+                alert('Login first');
+                toPage('auth');
+                return;
+            }
+            
+            const link = document.getElementById('referral-link').getAttribute('data-link');
+            const text = `Join Chris FX World for premium trading signals and earn money! Use my referral link: ${link}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+        
+        function shareOnFacebook() {
+            if (!currentUser) {
+                alert('Login first');
+                toPage('auth');
+                return;
+            }
+            
+            const link = document.getElementById('referral-link').getAttribute('data-link');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, '_blank');
+        }
+        
+        function shareOnTelegram() {
+            if (!currentUser) {
+                alert('Login first');
+                toPage('auth');
+                return;
+            }
+            
+            const link = document.getElementById('referral-link').getAttribute('data-link');
+            const text = `Join Chris FX World for premium trading signals and earn money! Use my referral link: ${link}`;
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, '_blank');
+        }
+        
+        /* ========================= Withdraw ========================= */
+        function requestWithdraw() {
+            if (!currentUser) {
+                alert('Login first');
+                toPage('auth');
+                return;
+            }
+            
+            const ud = ensureUser(currentUser);
+            const amount = Number(document.getElementById('withdraw-amount-page').value || 0);
+            const help = document.getElementById('withdraw-help');
+            
+            if (isNaN(amount) || amount <= 0) {
+                help.textContent = 'Enter an amount to withdraw';
+                help.style.color = 'var(--hot)';
+                return;
+            }
+            
+            if (amount < 2) {
+                help.textContent = 'Minimum withdrawal is $2';
+                help.style.color = 'var(--hot)';
+                return;
+            }
+            
+            if (amount > 10) {
+                help.textContent = 'Maximum single withdrawal is $10';
+                help.style.color = 'var(--hot)';
+                return;
+            }
+            
+            if (amount > ud.balance) {
+                help.textContent = 'Insufficient balance';
+                help.style.color = 'var(--hot)';
+                return;
+            }
+            
+            // Subtract, add withdraw record
+            ud.balance = Number((ud.balance - amount).toFixed(8));
+            ud.withdraws = ud.withdraws || [];
+            ud.withdraws.unshift({
+                amount: Number(amount.toFixed(2)),
+                date: new Date().toLocaleString(),
+                status: 'Pending'
+            });
+            
+            saveAll();
+            help.style.color = 'var(--accent1)';
+            help.textContent = 'Withdraw requested — contact +2348115975301 on WhatsApp for payment.';
+            showNotification('Withdrawal request submitted! Contact support for payment.', 'success');
+            
+            refreshDashboard();
+            refreshWithdrawPage();
+        }
+        
+        function refreshWithdrawPage() {
+            if (!currentUser) return;
+            
+            const ud = ensureUser(currentUser);
+            document.getElementById('withdraw-balance').innerText = '$' + fmt(ud.balance || 0);
+            
+            const list = userData[currentUser].withdraws || [];
+            const el = document.getElementById('withdraw-list');
+            
+            if (!list.length) {
+                el.innerHTML = '<div class="muted small" style="text-align: center; padding: 20px;">No withdrawal history</div>';
+            } else {
+                el.innerHTML = list.map(w => `
+                    <div style="padding: 12px; border-bottom: 1px solid var(--muted); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>$${Number(w.amount).toFixed(2)}</strong>
+                            <div class="small muted">${w.date}</div>
+                        </div>
+                        <span style="color: ${w.status === 'Pending' ? 'var(--gold)' : 'var(--accent1)'};">${w.status}</span>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        /* ========================= Dashboard refresh & levels ========================= */
+        function refreshDashboard() {
+            if (!currentUser) return;
+            
+            ensureUser(currentUser);
+            prepareReferralLink();
+            
+            const ud = userData[currentUser];
+            document.getElementById('dash-welcome').innerText = 'Welcome, ' + (ud.profile.name || currentUser);
+            document.getElementById('user-balance').innerText = '$' + fmt(ud.balance || 0);
+            document.getElementById('ref-count').innerText = ud.referrals || 0;
+            document.getElementById('ref-earned').innerText = ((ud.referrals || 0) * 0.02).toFixed(2);
+            
+            // Leveling thresholds
+            const bal = Number(ud.balance || 0);
+            let level = 'Beginner Trader';
+            let levelIcon = 'fas fa-medal';
+            
+            if (bal >= 50) {
+                level = 'Boss Trader';
+                levelIcon = 'fas fa-crown';
+            } else if (bal >= 10) {
+                level = 'Elite Trader';
+                levelIcon = 'fas fa-award';
+            } else if (bal >= 1) {
+                level = 'Pro Trader';
+                levelIcon = 'fas fa-star';
+            }
+            
+            document.getElementById('user-level').innerHTML = `<i class="${levelIcon}"></i> Level: ${level}`;
+        }
+        
+        /* ========================= Settings Page ========================= */
+        function refreshSettingsPage() {
+            if (!currentUser) return;
+            
+            const ud = ensureUser(currentUser);
+            document.getElementById('settings-username').value = currentUser;
+            document.getElementById('settings-name').value = ud.profile.name || '';
+        }
+        
+        function updateSettings() {
+            if (!currentUser) {
+                alert('Login first');
+                toPage('auth');
+                return;
+            }
+            
+            const newPassword = document.getElementById('settings-password').value;
+            const displayName = document.getElementById('settings-name').value.trim();
+            
+            if (newPassword) {
+                users[currentUser] = newPassword;
+            }
+            
+            if (displayName) {
+                userData[currentUser].profile.name = displayName;
+            }
+            
+            saveAll();
+            showNotification('Settings updated successfully!', 'success');
+            refreshDashboard();
+        }
+        
+        function clearData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+        
+        /* ========================= Logout ========================= */
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem(KEY_SESSION);
+            showPageKey('welcome');
+            showNotification('You have been logged out.', 'success');
+        }
+        
+        /* ========================= Animated Candlestick Chart ========================= */
+        const candlesEl = document.getElementById('candles');
+        let candleData = [];
+        
+        function initCandles() {
+            candleData = [];
+            let price = 45000 + (Math.random() * 2000 - 1000);
+            
+            for (let i = 0; i < 45; i++) {
+                const o = price;
+                const c = price + (Math.random() * 800 - 400);
+                const h = Math.max(o, c) + Math.random() * 200;
+                const l = Math.min(o, c) - Math.random() * 200;
+                candleData.push({ open: o, high: h, low: l, close: c });
+                price = c;
+            }
+            
+            renderCandles();
+            setInterval(() => pushNewCandle(), 1200);
+        }
+        
+        function pushNewCandle() {
+            const last = candleData[candleData.length - 1] || { close: 45000 };
+            const base = last.close;
+            const o = base;
+            const c = base + (Math.random() * 800 - 400);
+            const h = Math.max(o, c) + Math.random() * 200;
+            const l = Math.min(o, c) - Math.random() * 200;
+            
+            candleData.push({ open: o, high: h, low: l, close: c });
+            if (candleData.length > 60) candleData.shift();
+            
+            renderCandles();
+        }
+        
+        function renderCandles() {
+            candlesEl.innerHTML = '';
+            const highs = candleData.map(d => d.high);
+            const lows = candleData.map(d => d.low);
+            const max = Math.max(...highs);
+            const min = Math.min(...lows);
+            const range = Math.max(1, max - min);
+            
+            candleData.forEach(d => {
+                const c = document.createElement('div');
+                c.className = 'candle';
+                
+                const wick = document.createElement('div');
+                wick.className = 'wick';
+                
+                const body = document.createElement('div');
+                body.className = 'body';
+                
+                const green = d.close >= d.open;
+                const bodyHeight = Math.max(3, Math.abs(d.close - d.open) / range * 200);
+                const wickTop = (max - d.high) / range * 200;
+                const wickBottom = (d.low - min) / range * 200;
+                
+                wick.style.top = wickTop + 'px';
+                wick.style.bottom = wickBottom + 'px';
+                body.style.height = bodyHeight + 'px';
+                body.style.background = green ? 'linear-gradient(180deg, #00ffb5, #00c28a)' : 'linear-gradient(180deg, #ff9a9a, #ff4d4d)';
+                body.style.boxShadow = '0 1px 4px rgba(0,0,0,0.6)';
+                
+                c.appendChild(wick);
+                c.appendChild(body);
+                candlesEl.appendChild(c);
+            });
+        }
+        
+        /* ========================= News ticker ========================= */
+        function startNewsTicker() {
+            const msgs = [
+                "EUR/USD bullish 📈 • Gold higher • BTC consolidating near 45k",
+                "Market opens: Asian session volatile • Keep an eye on USD news",
+                "Oil prices rising • Risk assets mixed • Use stop-loss at all times",
+                "Tech earnings today • Expect volatility in major pairs",
+                "Follow signals carefully — manage risk 1-2% per trade"
+            ];
+            
+            const el = document.getElementById('news-scroll');
+            let i = 0;
+            
+            setInterval(() => {
+                el.style.animation = 'none';
+                void el.offsetWidth;
+                el.textContent = msgs[i % msgs.length];
+                el.style.animation = null;
+                i++;
+            }, 6000);
+        }
+        
+        /* ========================= Live USD/JPY ticker for auth page ========================= */
+        function startTicker() {
+            const el = document.getElementById('auth-ticker');
+            let price = 150 + Math.random() * 0.8 - 0.4;
+            
+            setInterval(() => {
+                price = Math.max(90, price + (Math.random() * 0.4 - 0.2));
+                el.textContent = 'USD/JPY ' + price.toFixed(2);
+            }, 1300);
+        }
+        
+        /* ========================= Signal generator (fake real-looking) ========================= */
+        function generateSignal() {
+            const pairs = ['EUR/USD', 'GBP/USD', 'USD/JPY', 'BTC/USDT', 'ETH/USDT', 'AUD/USD'];
+            const pair = pairs[Math.floor(Math.random() * pairs.length)];
+            const direction = Math.random() > 0.5 ? 'Buy' : 'Sell';
+            const base = pair.includes('USDT') ? (Math.random() * 40000 + 1000) : (Math.random() * 1.5 + 1.0);
+            const entry = pair.includes('USDT') ? Math.round(base) : (Math.round(base * 10000) / 10000);
+            const rr = [1.5, 2, 2.5][Math.floor(Math.random() * 3)];
+            const slOffset = pair.includes('USDT') ? Math.round(Math.random() * 500 + 50) : (Math.round((Math.random() * 0.005 + 0.0005) * 100000) / 100000);
+            const tp = pair.includes('USDT') ? entry + (direction === 'Buy' ? slOffset * rr : -slOffset * rr) : Number((entry + (direction === 'Buy' ? slOffset * rr : -slOffset * rr)).toFixed(5));
+            const sl = pair.includes('USDT') ? entry + (direction === 'Buy' ? -slOffset : slOffset) : Number((entry + (direction === 'Buy' ? -slOffset : slOffset)).toFixed(5));
+            const acc = Math.floor(85 + Math.random() * 14); // 85-98%
+            
+            const text = `${direction} ${pair} @ ${entry} | TP: ${tp} | SL: ${sl} | Claimed accuracy: ${acc}%`;
+            document.getElementById('signal-output').innerText = text;
+            
+            // Save signal to user's data if logged
+            if (currentUser) {
+                userData[currentUser].lastSignal = { text, date: new Date().toLocaleString() };
+                saveAll();
+            }
+            
+            showNotification('New trading signal generated!', 'success');
+        }
+        
+        /* ========================= Chat: offline keyword-based with typing effect ========================= */
+        const chatMessages = document.getElementById('chat-messages');
+        
+        function ensureChatIntro() {
+            if (!currentUser) {
+                alert('Please login/register to chat');
+                toPage('auth');
+                return;
+            }
+            
+            if (chatMessages.children.length === 0) {
+                addBotTyping("Hello! I am the trading AI for Chris. Chris is my boss — a legit trader with 90% profit and 10% loss (claimed). Ask me about trading, brokers, MT4/MT5, TP/SL, indicators, candlesticks, or signals. If you ask about a trading app, I'll ask you to contact Chris directly.");
+            }
+        }
+        
+        function addUserBubble(text) {
+            const b = document.createElement('div');
+            b.className = 'bubble user';
+            b.textContent = text;
+            chatMessages.appendChild(b);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addBotBubble(text) {
+            const b = document.createElement('div');
+            b.className = 'bubble bot';
+            b.textContent = text;
+            chatMessages.appendChild(b);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addBotTyping(text, speed = 14) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'bubble bot typing';
+            placeholder.textContent = 'Chris AI is typing…';
+            chatMessages.appendChild(placeholder);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            setTimeout(() => {
+                let i = 0;
+                placeholder.classList.remove('typing');
+                placeholder.textContent = '';
+                
+                const t = setInterval(() => {
+                    placeholder.textContent += text.charAt(i) || '';
+                    i++;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    if (i > text.length) {
+                        clearInterval(t);
+                    }
+                }, speed);
+            }, 500 + Math.random() * 700);
+        }
+        
+        function chatReply(text) {
+            const m = text.toLowerCase();
+            
+            // Greeting
+            if (/\b(hello|hi|hey|greetings|howdy|hola|yo)\b/.test(m)) {
+                return "Hello there! I'm Chris AI, here to help with your trading questions. What would you like to know about trading?";
+            }
+            
+            // scam/fake
+            if (/\b(scam|fake|fraud|sham|scammer|legit|legitimate|trust)\b/.test(m)) {
+                return "💯 Chris is 100% legitimate and trusted by many traders worldwide. He provides signals with a claimed 90% profit rate and 10% loss. Always remember to protect your capital and use proper risk management with stop losses.";
+            }
+            
+            // trading app
+            if (/\b(app|platform|best app|trading app|mobile app|software|program)\b/.test(m)) {
+                return "📱 For app and platform recommendations, please contact Chris directly on WhatsApp: +2348115975301. He'll guide you to the best trading platforms he uses and trusts for optimal results.";
+            }
+            
+            // brokers
+            if (/\b(broker|brokers|regulated|regulation|spread|commission|withdraw|deposit|account)\b/.test(m)) {
+                return "🏦 Choosing the right broker is crucial for trading success. Look for regulated brokers with competitive spreads, reliable withdrawal processes, and good customer support. Chris can recommend specific brokers that he's had positive experiences with. Contact him on WhatsApp for personalized recommendations.";
+            }
+            
+            // MT4/MT5
+            if (/\b(mt4|mt5|meta trader|meta-trader|platform|terminal|indicator|ea|expert advisor)\b/.test(m)) {
+                return "🛠 MT4 & MT5 are powerful trading platforms used by millions worldwide. MT4 is great for Forex and CFDs, while MT5 supports more markets and timeframes. Both platforms support custom indicators and automated trading. Chris can help you set up and optimize your MT4/MT5 platform - message him on WhatsApp for assistance.";
+            }
+            
+            // signals
+            if (/\b(signal|signals|signal service|trade signal|entry|setups|opportunities)\b/.test(m)) {
+                return "🎯 Trading signals provide specific entry, stop-loss (SL) and take-profit (TP) levels for potential trades. Chris's signals are based on technical analysis and market experience. Remember to always risk only 1-2% of your capital per trade and never invest more than you can afford to lose.";
+            }
+            
+            // TP/SL
+            if (/\b(tp|take profit|sl|stop loss|stop-loss|stoploss|risk|reward|ratio|rr|risk management)\b/.test(m)) {
+                return "🔒 Proper risk management is the key to successful trading. Always set stop-loss orders where your trade idea is invalidated (based on support/resistance or volatility). Aim for a risk-reward ratio of at least 1:2. Never move your stop-loss further away once placed - this is called 'moving the stop' and is a common beginner mistake.";
+            }
+            
+            // indicators and candles
+            if (/\b(indicator|indicators|rsi|macd|ema|sma|bollinger|stochastic|candle|candlestick|doji|engulfing|hammer|pattern|analysis)\b/.test(m)) {
+                return "📊 Technical indicators and candlestick patterns are valuable tools for traders. Popular indicators include RSI (momentum), MACD (trend), and Moving Averages (support/resistance). Candlestick patterns like doji, hammer, and engulfing can signal potential reversals. The best approach is to use multiple confirmations before entering a trade.";
+            }
+            
+            // trade basics
+            if (/\b(trade|trading|start trading|how to start|beginner|strategy|learn|education)\b/.test(m)) {
+                return "🧭 Starting your trading journey? Begin with education: learn basic terminology, market hours, and order types. Practice with a demo account to develop your strategy without risk. Key principles: 1) Protect your capital 2) Use stop losses 3) Risk only 1-2% per trade 4) Keep a trading journal 5) Be patient and disciplined. Chris offers guidance for beginners - message him on WhatsApp!";
+            }
+            
+            // crypto
+            if (/\b(crypto|bitcoin|btc|ethereum|eth|binance|coinbase|wallet|blockchain|altcoin)\b/.test(m)) {
+                return "₿ Cryptocurrency trading involves unique opportunities and risks. Volatility is much higher than traditional markets, so risk management is even more important. Key factors: market sentiment, regulatory news, technological developments, and adoption rates. Always use secure wallets and reputable exchanges. Chris provides crypto signals too - contact him for details!";
+            }
+            
+            // money making
+            if (/\b(money|profit|income|earn|make money|get rich|wealth|financial|passive income)\b/.test(m)) {
+                return "💰 Trading can be profitable but isn't a get-rich-quick scheme. Success requires education, practice, discipline, and proper risk management. Most successful traders focus on consistent gains rather than huge wins. Avoid greed and emotion-driven decisions. With Chris's signals and guidance, many traders have improved their results, but remember: past performance doesn't guarantee future results.";
+            }
+            
+            // off-topic
+            return "🤖 I specialize in trading-related topics. Ask me about brokers, MT4/MT5, indicators, risk management, trading strategies, or cryptocurrency. For other questions or personalized advice, please contact Chris directly on WhatsApp: +2348115975301";
+        }
+        
+        function sendChat() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            addUserBubble(text);
+            input.value = '';
+            
+            const reply = chatReply(text);
+            addBotTyping(reply, 14);
+        }
+        
+        /* ========================= Helpers & utilities ========================= */
+        // Expose some internals for debugging (optional)
+        window._cfw = { users, userData, userIPs, myIP };
+        
+        /* End of script */
+    </script>
+</body>
+</html>
